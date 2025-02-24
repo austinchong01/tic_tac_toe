@@ -1,2 +1,4 @@
 # tic_tac_toe
-Tic Tac Toe
+Project: Tic Tac Toe
+
+The Odin Project JS Curriculum
