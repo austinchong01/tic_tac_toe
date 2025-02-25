@@ -114,6 +114,13 @@ function displayController(){
         div.textContent = `${text}`;
     }
 
+    document.addEventListener("click", (event) => {
+        let position = event.target.getAttribute("data-index");
+        if (position != null){
+            game.playRound(position);
+        }
+    });
+
     return {updateDOM, screen};
 }
 
@@ -138,13 +145,11 @@ function displayController(){
 // game.playRound(8);
 
 // // O wins
-game.playRound(7);
-game.playRound(3);
-game.playRound(5);
-game.playRound(8);
+// game.playRound(7);
+// game.playRound(3);
+// game.playRound(5);
 // game.playRound(8);
 // game.playRound(4);
 // game.playRound(0);
 // game.playRound(2);
 // game.playRound(6);
-// game.playRound(1);
