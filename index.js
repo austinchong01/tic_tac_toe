@@ -14,7 +14,7 @@ function createBoard(){
     return { getBoard, updateBoard, printBoard };
 }
 
-function gameController(){
+const game = (function gameController(){
     const board = createBoard();
     
     const player1 = {marker: "X"};
@@ -39,6 +39,8 @@ function gameController(){
 
     function checkEnd(){
         //check if a player has won
+
+        //check if board is full
         if (!board.includes(0)){
             console.log("tie")
             return true;
@@ -55,10 +57,8 @@ function gameController(){
     };
 
     return {playRound};
-}
+})();
 
-const game = gameController();
 game.playRound(3);
 game.playRound(0);
-
 game.playRound(0);
