@@ -22,7 +22,7 @@ const game = (function gameController(){
     const players = [player1, player2];
 
     let currPlayer = players[0]; //first player is X
-    console.log(currPlayer);
+    console.log(currPlayer.marker + "'s " + "turn")
 
     function switchPlayer() {
         currPlayer = (currPlayer == players[0] ? players[1] : players[0]);
@@ -80,19 +80,29 @@ const game = (function gameController(){
     const playRound = (position) => {
         if (validMove(position)){
             board.updateBoard(currPlayer.marker, position);
+            board.printBoard();
             if (checkWinner()){
-                console.log(currPlayer.name + " wins!");
+                console.log(currPlayer.marker + " wins!");
+                return;
             }
             checkTie();
             switchPlayer();
-            board.printBoard();
+
+            console.log("");
+            console.log(currPlayer.marker + "'s " + "turn")
         }
-        console.log("");
     };
 
     return {playRound};
 })();
 
-game.playRound(2);
+    // 0 1 2
+    // 3 4 5
+    // 6 7 8
+
+game.playRound(1);
 game.playRound(4);
+game.playRound(0);
+game.playRound(2);
+game.playRound(3);
 game.playRound(6);
