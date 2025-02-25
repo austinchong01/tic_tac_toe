@@ -1,9 +1,21 @@
 * {
     font-family: 'Courier New', Courier, monospace;
-    font-size: 75px;
+    font-size: 50px;
     font-weight: 500;
+    margin: auto;
+}
+
+div {
+    text-align: center;
 }
 
 table {
-    margin: auto;
+    border: 1px solid black;
+}
+
+td {
+    border: 1px solid black;
+    width: 90px;
+    height: 90px;
+    text-align: center;
 }

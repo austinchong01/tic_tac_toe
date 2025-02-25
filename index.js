@@ -1,7 +1,7 @@
 function createBoard(){
-    let grid = [0, 0, 0,
-                 0, 0, 0,
-                 0, 0, 0];
+    let grid = ["", "", "",
+                 "", "", "",
+                 "", "", ""];
     const getBoard = () => grid;
     const updateBoard = (marker, position) => grid[position] = marker;
     const printBoard = () => {
@@ -14,14 +14,15 @@ function createBoard(){
 
 const game = (function gameController(){
     const board = createBoard();
-    displayController(board.getBoard());
+    const display = displayController();
     
     const player1 = {name: "p1", marker: "X"};
     const player2 = {name: "p2", marker: "O"};
     const players = [player1, player2];
 
     let currPlayer = players[0]; //first player is X
-    console.log(currPlayer.marker + "'s " + "turn")
+    display.screen(currPlayer.marker + "'s " + "turn");
+    //console.log(currPlayer.marker + "'s " + "turn")
 
     function switchPlayer() {
         currPlayer = (currPlayer == players[0] ? players[1] : players[0]);
@@ -49,14 +50,14 @@ const game = (function gameController(){
             //i = 2: 6 7 8, 2 5 8
 
             //column check
-            if (grid[i] != 0 && grid[i] == grid[i+3] && grid[i] == grid[i+6]) return true;
+            if (grid[i] != "" && grid[i] == grid[i+3] && grid[i] == grid[i+6]) return true;
             //row check
             let j = i*3;
-            if (grid[j] != 0 && grid[j] == grid[j+1] && grid[j] == grid[j+2]) return true;
+            if (grid[j] != "" && grid[j] == grid[j+1] && grid[j] == grid[j+2]) return true;
         }
         //diagonal check
-        if ((grid[0] != 0 && grid[0] == grid[4] && grid[0] == grid[8]) || 
-            (grid[2] != 0 && grid[2] == grid[4] && grid[2] == grid[6])){
+        if ((grid[0] != "" && grid[0] == grid[4] && grid[0] == grid[8]) || 
+            (grid[2] != "" && grid[2] == grid[4] && grid[2] == grid[6])){
             return true;
         }
         return false;
@@ -64,8 +65,9 @@ const game = (function gameController(){
 
     function checkTie(){
         const grid = board.getBoard();
-        if (!grid.includes(0)){
-            console.log("Cat's Game!")
+        if (!grid.includes("")){
+            display.screen("Cat's Game");
+            //console.log("Cat's Game!");
             return true;
         } else {
             return false;
@@ -73,34 +75,46 @@ const game = (function gameController(){
     }
 
     const playRound = (position) => {
-        if (validMove(position)){
-            board.updateBoard(currPlayer.marker, position);
+        if (validMove(position) && !checkWinner() && !checkTie()){
 
-            displayController(board.getBoard())
-            board.printBoard();
+            board.updateBoard(currPlayer.marker, position);
+            display.updateDOM(board.getBoard());
+            //board.printBoard();
 
             if (checkWinner()){
-                console.log(currPlayer.marker + " wins!");
+                display.screen(currPlayer.marker + " wins!");
+                //console.log(currPlayer.marker + " wins!");
                 return;
             }
-            if (checkTie()) return;;
+            if (checkTie()) return;
             switchPlayer();
-            console.log("");
-            console.log(currPlayer.marker + "'s " + "turn")
+
+            display.screen(currPlayer.marker + "'s " + "turn")
+            // console.log("");
+            // console.log(currPlayer.marker + "'s " + "turn")
         }
     };
 
     return {playRound};
 })();
 
-function displayController(grid){
+function displayController(){
     //print to DOM
-    for (let i = 0; i < 3; i++){
-        for (let j = 0; j < 3; j++){
-            const cell = document.querySelector(`tr:nth-child(${i+1}) td:nth-child(${j+1})`);
-            cell.textContent = grid[i*3 + j];
+    function updateDOM(grid){
+        for (let i = 0; i < 3; i++){
+            for (let j = 0; j < 3; j++){
+                const cell = document.querySelector(`tr:nth-child(${i+1}) td:nth-child(${j+1})`);
+                cell.textContent = grid[i*3 + j];
+            }
         }
     }
+
+    function screen(text) {
+        const div = document.querySelector("div");
+        div.textContent = `${text}`;
+    }
+
+    return {updateDOM, screen};
 }
 
     // 0 1 2
@@ -110,15 +124,27 @@ function displayController(grid){
 //print board
 // game.playRound(0);
 // game.playRound(3);
-// game.playRound(6)
+// game.playRound(6);
 
 // tie game
-game.playRound(4);
-game.playRound(0);
-game.playRound(2);
-game.playRound(6);
-game.playRound(1);
+// game.playRound(4);
+// game.playRound(0);
+// game.playRound(2);
+// game.playRound(6);
+// game.playRound(1);
+// game.playRound(7);
+// game.playRound(3);
+// game.playRound(5);
+// game.playRound(8);
+
+// // O wins
 game.playRound(7);
 game.playRound(3);
 game.playRound(5);
 game.playRound(8);
+// game.playRound(8);
+// game.playRound(4);
+// game.playRound(0);
+// game.playRound(2);
+// game.playRound(6);
+// game.playRound(1);
