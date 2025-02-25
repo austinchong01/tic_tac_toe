@@ -52,15 +52,15 @@ const game = (function gameController(){
             //i = 2: 6 7 8, 2 5 8
 
             //column check
-            if (grid[i] == grid[i+3] && grid[i] == grid[i+6]) return true;
+            if (grid[i] != 0 && grid[i] == grid[i+3] && grid[i] == grid[i+6]) return true;
 
             //row check
             let j = i*3;
-            if (grid[j] == grid[j+1] && grid[j] == grid[j+2]) return true;
+            if (grid[j] != 0 && grid[j] == grid[j+1] && grid[j] == grid[j+2]) return true;
         }
         //diagonal check
-        if (grid[0] == 0 || grid[2] == 0) return false;
-        if ((grid[0] == grid[4] && grid[0] == grid[8]) || (grid[2] == grid[4] && grid[2] == grid[6])){
+        if ((grid[0] != 0 && grid[0] == grid[4] && grid[0] == grid[8]) || 
+            (grid[2] != 0 && grid[2] == grid[4] && grid[2] == grid[6])){
             return true;
         }
 
@@ -80,12 +80,11 @@ const game = (function gameController(){
     const playRound = (position) => {
         if (validMove(position)){
             board.updateBoard(currPlayer.marker, position);
-            console.log("reached")
             if (checkWinner()){
                 console.log(currPlayer.name + " wins!");
             }
             checkTie();
-            //switchPlayer();
+            switchPlayer();
             board.printBoard();
         }
         console.log("");
@@ -94,6 +93,6 @@ const game = (function gameController(){
     return {playRound};
 })();
 
-game.playRound(3);
+game.playRound(2);
 game.playRound(4);
-game.playRound(5);
+game.playRound(6);
