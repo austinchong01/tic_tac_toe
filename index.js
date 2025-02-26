@@ -4,39 +4,35 @@ function createBoard(){
                  "", "", ""];
     const getBoard = () => grid;
     const updateBoard = (marker, position) => grid[position] = marker;
-    const printBoard = () => {
-        for (let i = 0; i < grid.length; i += 3){
-            console.log(grid[i], grid[i+1], grid[i+2]);
-        }
-    };
-    return { getBoard, updateBoard, printBoard };
+    return { getBoard, updateBoard };
 }
 
-const game = (function gameController(){
+function gameController(name1, name2){
     const board = createBoard();
     const display = displayController();
     
-    const player1 = {name: "p1", marker: "X"};
-    const player2 = {name: "p2", marker: "O"};
+    const player1 = {name: name1, marker: "X"};
+    const player2 = {name: name2, marker: "O"};
     const players = [player1, player2];
 
-    let currPlayer = players[0]; //first player is X
-    display.screen(currPlayer.marker + "'s " + "turn");
-    //console.log(currPlayer.marker + "'s " + "turn")
+    let currPlayer = players[0];
+    display.screen(currPlayer.name + "'s " + "turn");
+    display.updateDOM(board.getBoard());
 
     function switchPlayer() {
         currPlayer = (currPlayer == players[0] ? players[1] : players[0]);
-    };
+    }
 
     function validMove(position) {
         const grid = board.getBoard();
+        console.log(grid);
         if(grid[position] == "X" || grid[position] == "O"){
             console.log("invalid input");
             return false;
         } else {
             return true;
         }
-    };
+    }
 
     function checkWinner(){
         const grid = board.getBoard();
@@ -48,12 +44,11 @@ const game = (function gameController(){
             //i = 0: 0 1 2, 0 3 6
             //i = 1: 3 4 5, 1 4 7
             //i = 2: 6 7 8, 2 5 8
-
-            //column check
-            if (grid[i] != "" && grid[i] == grid[i+3] && grid[i] == grid[i+6]) return true;
-            //row check
             let j = i*3;
-            if (grid[j] != "" && grid[j] == grid[j+1] && grid[j] == grid[j+2]) return true;
+            if ((grid[i] != "" && grid[i] == grid[i+3] && grid[i] == grid[i+6]) ||  //column check
+                (grid[j] != "" && grid[j] == grid[j+1] && grid[j] == grid[j+2])){   //row check
+                return true;
+            }
         }
         //diagonal check
         if ((grid[0] != "" && grid[0] == grid[4] && grid[0] == grid[8]) || 
@@ -61,13 +56,12 @@ const game = (function gameController(){
             return true;
         }
         return false;
-    };
+    }
 
     function checkTie(){
         const grid = board.getBoard();
         if (!grid.includes("")){
             display.screen("Cat's Game");
-            //console.log("Cat's Game!");
             return true;
         } else {
             return false;
@@ -79,24 +73,20 @@ const game = (function gameController(){
 
             board.updateBoard(currPlayer.marker, position);
             display.updateDOM(board.getBoard());
-            //board.printBoard();
 
             if (checkWinner()){
-                display.screen(currPlayer.marker + " wins!");
-                //console.log(currPlayer.marker + " wins!");
+                display.screen(currPlayer.name + " wins!");
                 return;
             }
             if (checkTie()) return;
             switchPlayer();
 
-            display.screen(currPlayer.marker + "'s " + "turn")
-            // console.log("");
-            // console.log(currPlayer.marker + "'s " + "turn")
+            display.screen(currPlayer.name + "'s " + "turn")
         }
     };
 
     return {playRound};
-})();
+}
 
 function displayController(){
     //print to DOM
@@ -110,46 +100,35 @@ function displayController(){
     }
 
     function screen(text) {
-        const div = document.querySelector("div");
+        const div = document.querySelector(".text");
         div.textContent = `${text}`;
     }
 
+    return {updateDOM, screen};
+}
+
+const start = document.querySelector(".start");
+const modal = document.querySelector("dialog");
+const submit = document.querySelector("[data-close-modal]")
+
+start.addEventListener("click", () => {
+    modal.showModal();
+})
+
+submit.addEventListener("click", (event) => {
+    event.preventDefault();
+    let name1 = document.querySelector("#player1");
+    let name2 = document.querySelector("#player2");
+    const game = gameController(name1.value, name2.value);
+    modal.close();
+    name1.value = "";
+    name2.value = "";
+
+    //add X or O to DOM based on cell clicked
     document.addEventListener("click", (event) => {
         let position = event.target.getAttribute("data-index");
         if (position != null){
             game.playRound(position);
         }
     });
-
-    return {updateDOM, screen};
-}
-
-    // 0 1 2
-    // 3 4 5
-    // 6 7 8
-
-//print board
-// game.playRound(0);
-// game.playRound(3);
-// game.playRound(6);
-
-// tie game
-// game.playRound(4);
-// game.playRound(0);
-// game.playRound(2);
-// game.playRound(6);
-// game.playRound(1);
-// game.playRound(7);
-// game.playRound(3);
-// game.playRound(5);
-// game.playRound(8);
-
-// // O wins
-// game.playRound(7);
-// game.playRound(3);
-// game.playRound(5);
-// game.playRound(8);
-// game.playRound(4);
-// game.playRound(0);
-// game.playRound(2);
-// game.playRound(6);
+})

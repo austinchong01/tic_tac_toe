@@ -8,11 +8,17 @@
     <script src="index.js" defer></script>
 </head>
 <body>
+    <dialog>
+        <label for="player1">Player1 name<input type="text" name="player1" id="player1"></label>
+        <label for="player2">Player2 name<input type="text" name="player2" id="player2"></label>
+        <button data-close-modal>Submit</button>
+    </dialog>
     <table>
         <tr>    <td data-index="0"></td>   <td data-index="1"></td>     <td data-index="2"></td>   </tr>
         <tr>    <td data-index="3"></td>   <td data-index="4"></td>     <td data-index="5"></td>   </tr>
         <tr>    <td data-index="6"></td>   <td data-index="7"></td>     <td data-index="8"></td>   </tr>
     </table>
-    <div></div>
+    <div class="text"></div>
+    <div><button class="start">START/RESTART</button></div>
 </body>
 </html>
