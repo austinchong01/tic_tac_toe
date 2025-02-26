@@ -70,10 +70,8 @@ function gameController(name1, name2){
 
     const playRound = (position) => {
         if (validMove(position) && !checkWinner() && !checkTie()){
-
             board.updateBoard(currPlayer.marker, position);
             display.updateDOM(board.getBoard());
-
             if (checkWinner()){
                 display.screen(currPlayer.name + " wins!");
                 return;
@@ -116,6 +114,7 @@ start.addEventListener("click", () => {
 })
 
 submit.addEventListener("click", (event) => {
+    //get player names
     event.preventDefault();
     let name1 = document.querySelector("#player1");
     let name2 = document.querySelector("#player2");
